@@ -20,15 +20,16 @@ class PokemonService {
     return PokemonService.client;
   }
 
-  public static async getPokemonsList() {
+  public static async getPokemonsList(limit: number = 20, offset: number = 0) {
     try {
       const { data } = await PokemonService.getClient().query({
         query: GET_POKEMONS,
+        variables: { limit, offset },
       });
-      console.log("data: ", data);
-      const result = PokemonService.transformPokemonList(data.pokemon_v2_pokemon)
-      console.log('result: ', result);
-      return PokemonService.transformPokemonList(data.pokemon_v2_pokemon);
+      const result = PokemonService.transformPokemonList(
+        data.pokemon_v2_pokemon
+      );
+      return result;
     } catch (error) {
       console.error("Error fetching Pokemon list:", error);
       return [];
