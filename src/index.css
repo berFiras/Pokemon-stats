@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .fadeInOut {
+    animation: fadeBounce 1.5s infinite ease-in-out;
+  }
+
+  .scale-90 {
+    transform: scale(0.9);
+  }
+  .scale-100 {
+    transform: scale(1);
+  }
+  .scale-110 {
+    transform: scale(1.1);
+  }
+  .scale-125 {
+    transform: scale(1.25);
+  }
+
+  @keyframes fadeBounce {
+    0%,
+    100% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(-10px);
+    }
+  }
+
+  .delay-0 {
+    animation-delay: 0s;
+  }
+  .delay-150 {
+    animation-delay: 0.15s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+  .delay-450 {
+    animation-delay: 0.45s;
+  }
+}
