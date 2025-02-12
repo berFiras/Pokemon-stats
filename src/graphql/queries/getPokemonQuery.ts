@@ -14,6 +14,11 @@ export const GET_POKEMONS = gql`
           name
         }
       }
+      types: pokemon_v2_pokemontypes {
+        type: pokemon_v2_type {
+          name
+        }
+      }
     }
   }
 `;
