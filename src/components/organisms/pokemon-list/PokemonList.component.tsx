@@ -4,21 +4,37 @@ import PokemonDetails from "../../molecules/pokemon-details/PokemonDetails.compo
 import Pokemon from "../../../models/front/Pokemon.model";
 import { useHttp } from "../../../hooks/use-http/useHttp.hooks";
 import Loader from "../../molecules/loader/Loader.component";
+import PokemonFilters from "../../molecules/pokemon-filters/PokemonFilters.component";
+import { usePokemonFiltersStore } from "../../../store/filter.store";
+import {
+  filterPokemonByName,
+  filterPokemonByStat,
+  sortPokemonByName,
+  filterPokemonByType,
+} from "../../../utils/pokemon.utils";
 
 const PAGE_SIZE = 8;
 
 const PokemonList = () => {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
-  console.log("pokemonList: ", pokemonList);
+  const [filteredPokemonList, setFilteredPokemonList] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
-  console.log("offset: ", offset);
   const { sendRequest, isLoading } = useHttp();
+
+  const {
+    searchName,
+    selectedStat,
+    statValue,
+    sortBy,
+    sortOrder,
+    setSortOrder,
+  } = usePokemonFiltersStore();
 
   useEffect(() => {
     getPokemonList().catch(() => {});
   }, []);
 
-  // Get Intianl Pokemon List
+  // Get Initial Pokemon List
   const getPokemonList = useCallback(async () => {
     const { response } = await sendRequest(
       PokemonService.getPokemonsList,
@@ -28,10 +44,40 @@ const PokemonList = () => {
 
     if (response) {
       setPokemonList(response as Pokemon[]);
+      applyFilters(response as Pokemon[]);
     }
   }, []);
 
-  //Handle load more Pokemons
+  // Apply filters and sorting
+  const applyFilters = useCallback(
+    (list: Pokemon[]) => {
+      let filteredList = list;
+
+      if (searchName) {
+        filteredList = filterPokemonByName(filteredList, searchName);
+      }
+
+      if (selectedStat && statValue > 0) {
+        filteredList = filterPokemonByStat(
+          filteredList,
+          selectedStat,
+          statValue
+        );
+      }
+
+      if (sortBy === "name") {
+        filteredList = sortPokemonByName(filteredList, sortOrder);
+        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      } else if (sortBy === "type") {
+        filteredList = filterPokemonByType(filteredList, sortOrder);
+      }
+
+      setFilteredPokemonList(filteredList);
+    },
+    [searchName, selectedStat, statValue, sortBy, sortOrder, setSortOrder]
+  );
+
+  // Handle Load More Pokemons
   const handleLoadMore = useCallback(async () => {
     const nextOffset = offset + PAGE_SIZE;
 
@@ -41,7 +87,9 @@ const PokemonList = () => {
       nextOffset
     );
     if (response) {
-      setPokemonList((prevList) => [...prevList, ...(response as Pokemon[])]);
+      const newPokemonList = [...pokemonList, ...(response as Pokemon[])];
+      setPokemonList(newPokemonList);
+      applyFilters(newPokemonList);
       setOffset(nextOffset);
       // Scroll to page bottom after load more
       setTimeout(() => {
@@ -51,16 +99,27 @@ const PokemonList = () => {
         });
       }, 0);
     }
-  }, [offset]);
+  }, [offset, pokemonList, applyFilters]);
+
+  // Handle Reset all filters
+  const onResetFilters = useCallback(() => {
+    setFilteredPokemonList(pokemonList);
+  }, [pokemonList]);
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Pokémon List</h1>
+      <PokemonFilters
+        onSearchByName={() => applyFilters(pokemonList)}
+        onSearchByStat={() => applyFilters(pokemonList)}
+        onSortByName={() => applyFilters(pokemonList)}
+        onSortByType={() => applyFilters(pokemonList)}
+        onResetFilters={onResetFilters}
+      />
       {isLoading && <Loader />}
       {!isLoading && (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {pokemonList.map((item: Pokemon) => (
+            {filteredPokemonList.map((item: Pokemon) => (
               <PokemonDetails pokemon={item} key={item.id} />
             ))}
           </div>
