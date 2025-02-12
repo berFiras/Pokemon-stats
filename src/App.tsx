@@ -1,9 +1,7 @@
+import Home from "./pages/home/Home.component";
+
 function App() {
-  return (
-    <>
-      <div className="bg-blue-500">hello</div>
-    </>
-  );
+  return <Home />;
 }
 
 export default App;
