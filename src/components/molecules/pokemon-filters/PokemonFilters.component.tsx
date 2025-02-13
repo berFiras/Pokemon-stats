@@ -3,7 +3,7 @@ import Input from "../../atoms/input/Input.component";
 import Button from "../../atoms/button/Button.component";
 import { usePokemonFiltersStore } from "../../../store/filter.store";
 import PokemonFiltersProps from "../../../types/props/PokemonFiltersProps.type";
-import PokemonTypeListe from "../../../utils/PokemonTypeList.utils";
+import PokemonTypeList from "../../../utils/PokemonTypeList.utils";
 import PokemonStatsList from "../../../utils/PokemonStatsList.utlis";
 import { useCallback, useMemo } from "react";
 
@@ -20,10 +20,13 @@ const PokemonFilters = (props: PokemonFiltersProps) => {
     searchName,
     selectedStat,
     statValue,
+    typeValue,
     setSearchName,
     setSelectedStat,
     setStatValue,
     resetFilters,
+    setSortBy,
+    setTypeValue,
   } = usePokemonFiltersStore();
 
   // Handle seach by name
@@ -42,9 +45,29 @@ const PokemonFilters = (props: PokemonFiltersProps) => {
     onResetFilters();
   }, []);
 
+  // Handle sorting by name (fixes issue)
+  const handleSortByName = useCallback(() => {
+    setSortBy("name");
+    onSortByName();
+  }, [setSortBy, onSortByName]);
+
+  // Handle sorting by type
+  const handleSortByType = useCallback(
+    (type: string) => {
+      setSortBy("type");
+      setTypeValue(type);
+      onSortByType(type);
+    },
+    [onSortByType, setSortBy, setTypeValue]
+  );
+
   const isFilterApplied = useMemo(
-    () => searchName !== "" || selectedStat !== "attack" || statValue !== 0,
-    [searchName, selectedStat, statValue]
+    () =>
+      searchName !== "" ||
+    selectedStat !== "" ||
+    statValue !== 0 ||
+    typeValue !== "",
+    [searchName, selectedStat, statValue, typeValue]
   );
 
   return (
@@ -79,7 +102,10 @@ const PokemonFilters = (props: PokemonFiltersProps) => {
               <Select
                 value={selectedStat}
                 onChange={(value) => setSelectedStat(value)}
-                options={PokemonStatsList}
+                options={[
+                  { label: "Select Stat", value: "" },
+                  ...PokemonStatsList,
+                ]}
                 className="flex-1 dark:bg-gray-700 dark:text-white dark:border-gray-600"
               />
               <Input
@@ -103,7 +129,7 @@ const PokemonFilters = (props: PokemonFiltersProps) => {
             <label className="text-sm font-medium text-gray-900 dark:text-white">
               Sort by Name
             </label>
-            <Button buttonValue="Sort by Name" onClick={onSortByName} />
+            <Button buttonValue="Sort by Name" onClick={handleSortByName} />
           </div>
 
           <div className="flex flex-col space-y-2">
@@ -111,8 +137,11 @@ const PokemonFilters = (props: PokemonFiltersProps) => {
               Sort by Type
             </label>
             <Select
-              onChange={(value) => onSortByType(value)}
-              options={PokemonTypeListe}
+              onChange={(value) => handleSortByType(value)}
+              options={[
+                { label: "Select Type", value: "" },
+                ...PokemonTypeList,
+              ]}
               className="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600"
             />
           </div>
