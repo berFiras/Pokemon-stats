@@ -1,50 +1,50 @@
-# React + TypeScript + Vite
+# Pokémon Stats Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application built with **React**, **TypeScript**, **TailwindCSS**, and **Zustand** to list Pokémon with their stats. The app allows users to search, filter, and sort Pokémon by name, stats, and type. Data is fetched from the **PokeAPI**.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Search Pokémon by Name**: Search for Pokémon by their name.
+- **Filter by Stats**: Filter Pokémon by stats like HP, Attack, Defense, and Speed.
+- **Sort by Name or Type**: Sort Pokémon by name or type.
+- **Pagination**: Load more Pokémon with a "Load More" button.
+- **Persistent Filters**: Filters and sorting preferences are saved across page reloads.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- **Frontend**:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+  - [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
+  - [TypeScript](https://www.typescriptlang.org/) - A typed superset of JavaScript.
+  - [TailwindCSS](https://tailwindcss.com/) - A utility-first CSS framework.
+  - [Zustand](https://zustand-demo.pmnd.rs/) - A state management library for React.
+  - [Vite](https://vitejs.dev/) - A fast build tool for modern web development.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **API**:
+  - [PokeAPI](https://pokeapi.co/) - A RESTful API for Pokémon data.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+---
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## How to Use
+
+### Prerequisites
+
+- **Node.js**: Make sure you have Node.js installed. Download it from [here](https://nodejs.org/).
+- **Git**: Install Git to clone the repository. Download it from [here](https://git-scm.com/).
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/pokemon-stats-app.git
+   cd pokemon-stats-app
+   npm install
+   ```
+
+---
+
+## App Demo
+
+**Pokemon Stats Demo**: [PokeAPI](https://pokeapi.co/)

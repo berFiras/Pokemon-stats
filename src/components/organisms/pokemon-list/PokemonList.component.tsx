@@ -11,7 +11,7 @@ import {
   filterPokemonByStat,
   sortPokemonByName,
   filterPokemonByType,
-} from "../../../utils/pokemon.utils";
+} from "../../../utils/Pokemon.utils";
 
 const PAGE_SIZE = 8;
 
@@ -27,15 +27,14 @@ const PokemonList = () => {
     statValue,
     sortBy,
     sortOrder,
+    typeValue,
     setSortOrder,
+    resetFilters,
   } = usePokemonFiltersStore();
 
-  useEffect(() => {
-    getPokemonList().catch(() => {});
-  }, []);
-
-  // Get Initial Pokemon List
+  // Fetch Initial Pokemon List
   const getPokemonList = useCallback(async () => {
+    setOffset(0);
     const { response } = await sendRequest(
       PokemonService.getPokemonsList,
       PAGE_SIZE,
@@ -44,14 +43,18 @@ const PokemonList = () => {
 
     if (response) {
       setPokemonList(response as Pokemon[]);
-      applyFilters(response as Pokemon[]);
+      setFilteredPokemonList(response as Pokemon[]);
     }
+  }, []);
+
+  useEffect(() => {
+    getPokemonList().catch(() => {});
   }, []);
 
   // Apply filters and sorting
   const applyFilters = useCallback(
     (list: Pokemon[]) => {
-      let filteredList = list;
+      let filteredList = [...list];
 
       if (searchName) {
         filteredList = filterPokemonByName(filteredList, searchName);
@@ -69,13 +72,31 @@ const PokemonList = () => {
         filteredList = sortPokemonByName(filteredList, sortOrder);
         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
       } else if (sortBy === "type") {
-        filteredList = filterPokemonByType(filteredList, sortOrder);
+        filteredList = filterPokemonByType(filteredList, typeValue);
       }
 
       setFilteredPokemonList(filteredList);
     },
-    [searchName, selectedStat, statValue, sortBy, sortOrder, setSortOrder]
+    [
+      searchName,
+      selectedStat,
+      statValue,
+      sortBy,
+      sortOrder,
+      typeValue,
+      setSortOrder,
+    ]
   );
+
+  useEffect(() => {
+    applyFilters(pokemonList);
+  }, [typeValue, pokemonList]);
+
+  // Handle Reset all filters
+  const onResetFilters = useCallback(() => {
+    resetFilters();
+    getPokemonList();
+  }, [resetFilters, getPokemonList]);
 
   // Handle Load More Pokemons
   const handleLoadMore = useCallback(async () => {
@@ -91,20 +112,8 @@ const PokemonList = () => {
       setPokemonList(newPokemonList);
       applyFilters(newPokemonList);
       setOffset(nextOffset);
-      // Scroll to page bottom after load more
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: "smooth",
-        });
-      }, 0);
     }
   }, [offset, pokemonList, applyFilters]);
-
-  // Handle Reset all filters
-  const onResetFilters = useCallback(() => {
-    setFilteredPokemonList(pokemonList);
-  }, [pokemonList]);
 
   return (
     <div className="container mx-auto p-4">
@@ -123,14 +132,18 @@ const PokemonList = () => {
               <PokemonDetails pokemon={item} key={item.id} />
             ))}
           </div>
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={handleLoadMore}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
-            >
-              Load More
-            </button>
-          </div>
+
+          {/* Hide Load More button if no items */}
+          {filteredPokemonList.length > 0 && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={handleLoadMore}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
