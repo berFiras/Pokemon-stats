@@ -27,33 +27,6 @@ A web application built with **React**, **TypeScript**, **TailwindCSS**, and **Z
 
 ---
 
-## App Structure
-
-- **Frontend**:
-
-pokemon-stats-app/
-├── src/
-│ ├── components/
-│ │ ├── atoms/ # Basic UI components (Button, Input, Select)
-│ │ ├── molecules/ # Combined components (PokemonFilters)
-│ │ ├── organisms/ # Complex components (PokemonList)
-│ ├── hooks/ # Custom hooks (useHttp)
-│ ├── models/ # TypeScript interfaces and models
-│ ├── services/ # API service layer (PokemonService)
-│ ├── store/ # Zustand store for state management
-│ ├── utils/ # Utility functions (filtering, sorting)
-│ ├── App.tsx # Main application component
-│ ├── main.tsx # Entry point
-├── public/ # Static assets
-├── .eslintrc.js # ESLint configuration
-├── .gitignore # Git ignore file
-├── package.json # Project dependencies
-├── README.md # Project documentation
-├── tsconfig.json # TypeScript configuration
-├── vite.config.ts # Vite configuration
-
----
-
 ## How to Use
 
 ### Prerequisites
@@ -67,6 +40,7 @@ pokemon-stats-app/
    ```bash
    git clone https://github.com/your-username/pokemon-stats-app.git
    cd pokemon-stats-app
+   npm install
    ```
 
 ---
