@@ -2,15 +2,12 @@
 
 A web application built with **React**, **TypeScript**, **TailwindCSS**, and **Zustand** to list Pokémon with their stats. The app allows users to search, filter, and sort Pokémon by name, stats, and type. Data is fetched from the **PokeAPI**.
 
-![Demo Screenshot](https://via.placeholder.com/800x400) <!-- Replace with an actual screenshot or GIF -->
-
 ## Features
 
 - **Search Pokémon by Name**: Search for Pokémon by their name.
 - **Filter by Stats**: Filter Pokémon by stats like HP, Attack, Defense, and Speed.
 - **Sort by Name or Type**: Sort Pokémon by name or type.
 - **Pagination**: Load more Pokémon with a "Load More" button.
-- **Dark Mode**: Supports dark mode for better user experience.
 - **Persistent Filters**: Filters and sorting preferences are saved across page reloads.
 
 ---
@@ -44,3 +41,7 @@ A web application built with **React**, **TypeScript**, **TailwindCSS**, and **Z
    git clone https://github.com/your-username/pokemon-stats-app.git
    cd pokemon-stats-app
    ```
+
+## App Demo
+
+**Pokemon Stats Demo**: [PokeAPI](https://pokeapi.co/)
