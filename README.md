@@ -47,4 +47,4 @@ A web application built with **React**, **TypeScript**, **TailwindCSS**, and **Z
 
 ## App Demo
 
-**Pokemon Stats Demo**: [PokeAPI](https://pokeapi.co/)
+**Pokemon Stats Demo**: [PokemonStatsDemo](https://benevolent-beignet-23d897.netlify.app/)
